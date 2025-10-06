@@ -15,42 +15,50 @@ To write a program to predict the profit of a city using the linear regression m
 
 ## Program:
 ```
-# 1. Import necessary libraries
 import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error, r2_score
+import matplotlib.pyplot as plt
 
-# Sample Data (X: Hours Studied, Y: Marks Scored)
-X = np.array([2.5, 5.1, 3.2, 8.5, 3.5, 1.5, 9.2, 5.5, 8.3, 2.7]).reshape(-1, 1)
-Y = np.array([21, 47, 27, 75, 30, 20, 88, 60, 81, 25])
+# Generate synthetic data
+np.random.seed(42)
+X = 2 * np.random.rand(100, 1)
+y = 4 + 3 * X + np.random.randn(100, 1)  # y = 4 + 3x + noise
 
-# 2. Split the data
-X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
+# Add bias term (x0 = 1) to each instance
+X_b = np.c_[np.ones((100, 1)), X]  # shape = (100, 2)
 
-# 3. Model Training
-model = LinearRegression()
-model.fit(X_train, Y_train)
+# Gradient Descent Function
+def gradient_descent(X, y, learning_rate=0.1, n_iterations=1000):
+    m = len(y)
+    theta = np.random.randn(2, 1)  # initialize weights randomly (2 because we have bias + 1 feature)
+    
+    for iteration in range(n_iterations):
+        gradients = 2/m * X.T.dot(X.dot(theta) - y)
+        theta = theta - learning_rate * gradients
+    return theta
 
-# 4. Making Predictions
-Y_pred = model.predict(X_test)
+# Train the model
+theta_best = gradient_descent(X_b, y)
 
-# 5. Model Evaluation
-print(f"Intercept (B0): {model.intercept_}")
-print(f"Slope (B1): {model.coef_[0]}")
-print("---")
-print(f"Mean Squared Error (MSE): {mean_squared_error(Y_test, Y_pred):.2f}")
-print(f"R-squared (R2) Score: {r2_score(Y_test, Y_pred):.2f}")
+# Output model parameters
+print(f"Learned parameters: intercept = {theta_best[0][0]:.4f}, slope = {theta_best[1][0]:.4f}")
 
-# Example prediction: Predict marks for 6.0 hours studied
-new_hours = np.array([[6.0]])
-predicted_marks = model.predict(new_hours)
-print(f"Predicted Marks for 6.0 hours: {predicted_marks[0]:.2f}")
-
+# Plotting
+plt.scatter(X, y, color='blue', label='Data')
+X_new = np.array([[0], [2]])
+X_new_b = np.c_[np.ones((2, 1)), X_new]
+y_predict = X_new_b.dot(theta_best)
+plt.plot(X_new, y_predict, color='red', label='Prediction')
+plt.xlabel("X")
+plt.ylabel("y")
+plt.title("Linear Regression using Gradient Descent")
+plt.legend()
+plt.grid(True)
+plt.show()
 ```
 
 ## Output:
-<img width="604" height="208" alt="Screenshot 2025-10-06 233907" src="https://github.com/user-attachments/assets/da38a21b-ad0b-487b-b652-70ca7e079799" />
+<img width="849" height="605" alt="Screenshot 2025-10-07 000857" src="https://github.com/user-attachments/assets/942bbb36-b109-4a25-afa8-bbcd0dac8e77" />
+
 
 
 ## Result:
