@@ -8,11 +8,21 @@ To write a program to predict the profit of a city using the linear regression m
 2. Anaconda – Python 3.7 Installation / Jupyter notebook
 
 ## Algorithm
-1. 
-2. 
-3. 
-4. 
+1. Import necessary libraries (numpy, matplotlib)
 
+2.Generate synthetic data with a linear relationship and noise
+
+3.Add bias term to the input features
+
+4.Initialize model parameters randomly
+
+5.Define gradient descent function to update parameters iteratively
+
+6.Train the model using the gradient descent function
+
+7.Print learned parameters (intercept and slope)
+
+8.Visualize the results with a scatter plot and regression line
 ## Program:
 ```
 import numpy as np
